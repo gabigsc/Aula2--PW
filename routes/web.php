@@ -38,20 +38,38 @@ use Illuminate\Support\Facades\Route;
 
 // Slide 27 - Depois de criar o controller principal
 // Comenta o route acima
-Route::get('/', 'App\Http\Controllers\PrincipalController@principal'); 
-Route::get('/sobrenos', 'App\Http\Controllers\SobreNosController@principal'); 
-Route::get('/contato', 'App\Http\Controllers\ContatoController@principal'); 
+//Slide 52
+Route::get('/', 'App\Http\Controllers\PrincipalController@principal')->name('site.index'); 
+Route::get('/sobrenos', 'App\Http\Controllers\SobreNosController@principal')->name('site.sobrenos'); 
+Route::get('/contato', 'App\Http\Controllers\ContatoController@principal')->name('site.contato'); 
+
+// Route::get('/fornecedores', function() {return 'Fornecedores';});
+
+//Slide 76
+Route::prefix('/admin')->group (function() {
+Route::get('/clientes', function() {return 'Clientes'});
+Route::get('/fornecedores', 'App\Http\Controllers\FornecedorController@index')->name('admin.fornecedores');
+Route::get('/produtos', function() {return 'Produtos'});
+});
+
+//Slide 61
+ Route::get('/admin', function() {
+    return redirect()->route('site.index');
+    }
+ );
+
+//Slide 62
+  Route::fallback(function() {
+    echo 'a rota não existe <a href= "'.route('site.index').'"> clique aqui </a> ';
+    
+});
+
 
 // Passagem de parametros no browser
-Route::get('/contato/{nome?}/{mensagem?}'. 
-           function (string $nome, string $mensagem = 'sem texto') 
-           {echo "passagem de parametros via browser: $nome - $mensagem";}
-);
-
-
- Route::get('/dashboard', function () {
-    return view('dashboard');
- })->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('/contato/{nome?}/{mensagem?}'. 
+//           function (string $nome, string $mensagem = 'sem texto') 
+//           {echo "passagem de parametros via browser: $nome - $mensagem";}
+//);
 
  Route::get('/dashboard', function () {
     return view('dashboard');
